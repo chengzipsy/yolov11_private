@@ -7,17 +7,16 @@ input_dir = r"datasets/66/annotations"
 # 输出txt文件目录（不要以\结尾）
 out_dir = r"datasets/66/labels"
 # 类别名
-class_list = ['board']
+class_list = ["board"]
 
 
 # 获取目录所有xml文件
 def file_name(input_dir):
     F = []
     for root, dirs, files in os.walk(input_dir):
-
         for file in files:
             # print file.decode('gbk')    #文件名中有中文字符时转码
-            if os.path.splitext(file)[1] == '.xml':
+            if os.path.splitext(file)[1] == ".xml":
                 t = os.path.splitext(file)[0]
                 F.append(t)  # 将所有的文件名添加到L列表中
     return F  # 返回L列表
@@ -27,13 +26,13 @@ def file_name(input_dir):
 def get_class(filelist):
     for i in filelist:
         f_dir = input_dir + "\\" + i + ".xml"
-        in_file = open(f_dir, encoding='UTF-8')
+        in_file = open(f_dir, encoding="UTF-8")
         filetree = ET.parse(in_file)
         in_file.close()
         root = filetree.getroot()
-        for obj in root.iter('object'):
-            difficult = obj.find('difficult').text
-            cls = obj.find('name').text
+        for obj in root.iter("object"):
+            difficult = obj.find("difficult").text
+            cls = obj.find("name").text
             if cls not in class_list or int(difficult) == 1:
                 class_list.append(cls)
 
@@ -43,8 +42,8 @@ def ConverCoordinate(imgshape, bbox):
     xmin, xmax, ymin, ymax = bbox
     width = imgshape[0]
     height = imgshape[1]
-    dw = 1. / width
-    dh = 1. / height
+    dw = 1.0 / width
+    dh = 1.0 / height
     x = (xmin + xmax) / 2.0
     y = (ymin + ymax) / 2.0
     w = xmax - xmin
@@ -62,39 +61,39 @@ def ConverCoordinate(imgshape, bbox):
 def readxml(i):
     f_dir = input_dir + "\\" + i + ".xml"
 
-    txtresult = ''
+    txtresult = ""
 
-    outfile = open(f_dir, encoding='UTF-8')
+    outfile = open(f_dir, encoding="UTF-8")
     filetree = ET.parse(outfile)
     outfile.close()
     root = filetree.getroot()
 
     # 获取图片大小
-    size = root.find('size')
-    width = int(size.find('width').text)
-    height = int(size.find('height').text)
+    size = root.find("size")
+    width = int(size.find("width").text)
+    height = int(size.find("height").text)
     imgshape = (width, height)
 
     # 转化为yolov的格式
-    for obj in root.findall('object'):
+    for obj in root.findall("object"):
         # 获取类别名
-        obj_name = obj.find('name').text
+        obj_name = obj.find("name").text
 
         obj_id = class_list.index(obj_name)
         # 获取每个obj的bbox框的左上和右下坐标
-        bbox = obj.find('bndbox')
-        xmin = float(bbox.find('xmin').text)
-        xmax = float(bbox.find('xmax').text)
-        ymin = float(bbox.find('ymin').text)
-        ymax = float(bbox.find('ymax').text)
+        bbox = obj.find("bndbox")
+        xmin = float(bbox.find("xmin").text)
+        xmax = float(bbox.find("xmax").text)
+        ymin = float(bbox.find("ymin").text)
+        ymax = float(bbox.find("ymax").text)
         bbox_coor = (xmin, xmax, ymin, ymax)
 
         x, y, w, h = ConverCoordinate(imgshape, bbox_coor)
-        txt = '{} {} {} {} {}\n'.format(obj_id, x, y, w, h)
+        txt = f"{obj_id} {x} {y} {w} {h}\n"
         txtresult = txtresult + txt
 
     # print(txtresult)
-    f = open(out_dir + "\\" + i + ".txt", 'w+')
+    f = open(out_dir + "\\" + i + ".txt", "w+")
     f.write(txtresult)
     f.close()
 
@@ -113,8 +112,8 @@ for i in filelist:
     readxml(i)
 
 # 在out_dir下生成一个class文件
-f = open(out_dir + "\\classes.txt", 'a')
-classresult = ''
+f = open(out_dir + "\\classes.txt", "a")
+classresult = ""
 for i in class_list:
     classresult = classresult + i + "\n"
 f.write(classresult)

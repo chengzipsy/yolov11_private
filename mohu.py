@@ -1,7 +1,8 @@
-import albumentations as A
-import cv2
 import os
 import shutil
+
+import albumentations as A
+import cv2
 from tqdm import tqdm
 
 # 输入文件夹（原图和标签）
@@ -17,12 +18,14 @@ os.makedirs(output_images_dir, exist_ok=True)
 os.makedirs(output_labels_dir, exist_ok=True)
 
 # 定义增强管道（保持参数不变）
-transform = A.Compose([
-    A.Blur(blur_limit=(0,6), p=0.5),   # 模糊
-    # 你也可以加别的增强，比如：
-    # A.HorizontalFlip(p=0.5),
-    # A.RandomBrightnessContrast(p=0.5)
-])
+transform = A.Compose(
+    [
+        A.Blur(blur_limit=(0, 6), p=0.5),  # 模糊
+        # 你也可以加别的增强，比如：
+        # A.HorizontalFlip(p=0.5),
+        # A.RandomBrightnessContrast(p=0.5)
+    ]
+)
 
 # 处理所有图片
 for img_name in tqdm(os.listdir(input_images_dir), desc="Processing images"):
