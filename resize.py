@@ -1,13 +1,14 @@
 import os
-import cv2
 import shutil
+
+import cv2
 from tqdm import tqdm
 
 # 配置路径
-source_images_dir = "datasets/66/images"       # 原始图片目录
-source_labels_dir = "datasets/66/labels"       # YOLO标注目录（.txt）
-output_images_dir = "datasets/gds_resize/images"     # 输出图片目录
-output_labels_dir = "datasets/gds_resize/labels"     # 输出标注目录
+source_images_dir = "datasets/66/images"  # 原始图片目录
+source_labels_dir = "datasets/66/labels"  # YOLO标注目录（.txt）
+output_images_dir = "datasets/gds_resize/images"  # 输出图片目录
+output_labels_dir = "datasets/gds_resize/labels"  # 输出标注目录
 target_size = (480, 480)  # 宽, 高
 
 # 创建输出目录
@@ -15,7 +16,7 @@ os.makedirs(output_images_dir, exist_ok=True)
 os.makedirs(output_labels_dir, exist_ok=True)
 
 # 支持的图像后缀
-img_exts = ['.jpg', '.jpeg', '.png']
+img_exts = [".jpg", ".jpeg", ".png"]
 
 # 遍历图片
 for filename in tqdm(os.listdir(source_images_dir)):
