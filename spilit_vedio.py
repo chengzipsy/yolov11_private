@@ -1,12 +1,13 @@
-import cv2
-import os
-import glob
 import datetime
+import glob
+import os
 import time
+
+import cv2
 
 
 def extract_frames_from_video(video_path, output_dir, frame_interval):
-    """从单个视频文件中提取帧（带时间戳的唯一文件名）"""
+    """从单个视频文件中提取帧（带时间戳的唯一文件名）."""
     cap = cv2.VideoCapture(video_path)
     if not cap.isOpened():
         print(f"错误：无法打开视频文件 {video_path}")
@@ -67,7 +68,7 @@ def extract_frames_from_video(video_path, output_dir, frame_interval):
 
 
 def process_folder(input_folder, output_base_dir, frame_interval):
-    """处理文件夹中的所有MP4文件"""
+    """处理文件夹中的所有MP4文件."""
     # 确保输出基础目录存在
     os.makedirs(output_base_dir, exist_ok=True)
 
@@ -102,7 +103,7 @@ def process_folder(input_folder, output_base_dir, frame_interval):
     total_duration = end_time - start_time
 
     print(f"\n{'=' * 50}")
-    print(f"所有视频处理完成!")
+    print("所有视频处理完成!")
     print(f"共处理 {len(video_files)} 个视频")
     print(f"总保存图片数: {total_images} 张")
     print(f"总耗时: {total_duration:.1f}秒")
@@ -119,8 +120,8 @@ def process_folder(input_folder, output_base_dir, frame_interval):
 
 if __name__ == "__main__":
     # 用户输入
-    input_folder = 'datasets/video'
-    output_base_dir = 'datasets/new_dian'
+    input_folder = "datasets/video"
+    output_base_dir = "datasets/new_dian"
     frame_interval = 8
 
     # 执行处理
