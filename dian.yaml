@@ -1,0 +1,18 @@
+train: datasets\datasets_all\datasets\images\train  # train images (relative to 'path') 4 images
+val: datasets\datasets_all\datasets\images\val  # val images (relative to 'path') 4 images
+
+nc: 12
+
+# class names
+names: ['00mickey_mouse',
+        '01pikachu',
+        '02spongebob_squarepants',
+        '03pleasant_sheep',
+        '04donald_duck',
+        '05nezha',
+        '06big_head_son',
+        '',
+        '',
+        '07gg_bondw',
+        '08calabash_brothers',
+        '09grey_wolf']
