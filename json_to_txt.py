@@ -1,30 +1,33 @@
-import os
 import json
+import os
+
 from PIL import Image
+
 
 def convert_to_yolo_bbox(box, img_width, img_height):
     # JSON: x, y 是左上角；YOLO: 需要中心点
-    x_center = (box['x'] + box['width'] / 2) / img_width
-    y_center = (box['y'] + box['height'] / 2) / img_height
-    width = box['width'] / img_width
-    height = box['height'] / img_height
+    x_center = (box["x"] + box["width"] / 2) / img_width
+    y_center = (box["y"] + box["height"] / 2) / img_height
+    width = box["width"] / img_width
+    height = box["height"] / img_height
     return x_center, y_center, width, height
+
 
 def json_to_yolo(input_json_folder, output_txt_folder, image_folder=None, class_map=None):
     os.makedirs(output_txt_folder, exist_ok=True)
 
     for filename in os.listdir(input_json_folder):
-        if not filename.endswith('.json'):
+        if not filename.endswith(".json"):
             continue
 
         json_path = os.path.join(input_json_folder, filename)
 
-        with open(json_path, 'r', encoding='utf-8') as f:
+        with open(json_path, encoding="utf-8") as f:
             data = json.load(f)
 
         for item in data:
-            image_name = item['image']
-            txt_name = os.path.splitext(image_name)[0] + '.txt'
+            image_name = item["image"]
+            txt_name = os.path.splitext(image_name)[0] + ".txt"
             txt_path = os.path.join(output_txt_folder, txt_name)
 
             # 图像路径
@@ -36,11 +39,11 @@ def json_to_yolo(input_json_folder, output_txt_folder, image_folder=None, class_
             img = Image.open(img_path)
             img_width, img_height = img.size
 
-            with open(txt_path, 'w') as out_file:
-                for ann in item['annotations']:
-                    label = ann['label']
+            with open(txt_path, "w") as out_file:
+                for ann in item["annotations"]:
+                    label = ann["label"]
                     class_id = class_map[label] if class_map and label in class_map else 0
-                    bbox = ann['coordinates']
+                    bbox = ann["coordinates"]
                     x, y, w, h = convert_to_yolo_bbox(bbox, img_width, img_height)
 
                     # 检查值合法性
