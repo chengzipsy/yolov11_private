@@ -29,5 +29,5 @@ results = model.predict(
     show_labels=True,  # 显示检测的标签
     show_conf=True,  # 显示检测置信度
     show_boxes=True,  # 显示检测框
-    line_width=None  # 设置边界框的线条宽度，比如2，4
+    line_width=None,  # 设置边界框的线条宽度，比如2，4
 )
