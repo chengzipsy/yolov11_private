@@ -1,16 +1,17 @@
-import os
 import json
+import os
+
 import cv2
 
 # 自定义类别映射
 class_map = {
-    0: 'object',  # 类别 0 对应的名称
+    0: "object",  # 类别 0 对应的名称
 }
 
 
 # YOLO11的txt标签，转为Labelme的json文件
 def yolo_to_labelme(txt_path, img_width, img_height):
-    with open(txt_path, 'r') as file:
+    with open(txt_path) as file:
         lines = file.readlines()
 
     shapes = []
@@ -34,13 +35,15 @@ def yolo_to_labelme(txt_path, img_width, img_height):
         x2 = x_center + width / 2
         y2 = y_center + height / 2
 
-        shapes.append({
-            'label': class_map[class_id],
-            'points': [[x1, y1], [x2, y2]],
-            'group_id': None,
-            'shape_type': 'rectangle',
-            'flags': {}
-        })
+        shapes.append(
+            {
+                "label": class_map[class_id],
+                "points": [[x1, y1], [x2, y2]],
+                "group_id": None,
+                "shape_type": "rectangle",
+                "flags": {},
+            }
+        )
 
     return shapes
 
@@ -57,11 +60,11 @@ def main():
 
     # 遍历所有txt文件并转换
     for txt_file in os.listdir(txt_folder_path):
-        if txt_file.endswith('.txt'):
+        if txt_file.endswith(".txt"):
             txt_path = os.path.join(txt_folder_path, txt_file)
 
             # 获取与txt文件同名的图片路径
-            img_file = txt_file.replace('.txt', '.jpg')  # 假设图片是jpg格式
+            img_file = txt_file.replace(".txt", ".jpg")  # 假设图片是jpg格式
             img_path = os.path.join(image_folder_path, img_file)
 
             try:
@@ -76,17 +79,17 @@ def main():
 
                 # 创建LabelMe格式的json文件
                 labelme_data = {
-                    'version': '4.5.6',
-                    'flags': {},
-                    'shapes': shapes,
-                    'imagePath': img_file,
-                    'imageData': None,
-                    'imageHeight': img_height,
-                    'imageWidth': img_width
+                    "version": "4.5.6",
+                    "flags": {},
+                    "shapes": shapes,
+                    "imagePath": img_file,
+                    "imageData": None,
+                    "imageHeight": img_height,
+                    "imageWidth": img_width,
                 }
 
-                json_path = os.path.join(json_output_path, txt_file.replace('.txt', '.json'))
-                with open(json_path, 'w') as json_file:
+                json_path = os.path.join(json_output_path, txt_file.replace(".txt", ".json"))
+                with open(json_path, "w") as json_file:
                     json.dump(labelme_data, json_file, indent=2)
 
             except Exception as e:
